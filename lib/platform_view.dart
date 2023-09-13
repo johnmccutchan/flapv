@@ -2,22 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-enum PlatformViewType {
-  kBasic,
-  kInput,
-  kMap,
-}
-
-String _platformViewTypeAsString(PlatformViewType viewType) {
-  switch (viewType) {
-    case PlatformViewType.kBasic:
-      return 'static-text-view';
-    case PlatformViewType.kInput:
-      return 'input-grid-view';
-    case PlatformViewType.kMap:
-      return 'google-map-view';
-  }
-}
+import 'platform_view_type.dart';
 
 class PlatformView extends StatelessWidget {
   const PlatformView({Key? key, required this.viewType}) : super(key: key);
@@ -34,7 +19,7 @@ class PlatformView extends StatelessWidget {
         return Container(
             decoration: BoxDecoration(border: Border.all(width: 1)),
             child: AndroidView(
-              viewType: _platformViewTypeAsString(viewType),
+              viewType: platformViewTypeAsString(viewType),
               layoutDirection: TextDirection.ltr,
               creationParams: creationParams,
               creationParamsCodec: const StandardMessageCodec(),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'transform.dart';
-import 'platformviews.dart';
+import 'platform_view_holder.dart';
+import 'platform_view_type.dart';
 
 void main() {
   runApp(const MyApp());
@@ -39,8 +39,8 @@ class StartPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const TransformWidget(
-                          title: 'Basic', viewType: PlatformViewType.kBasic)),
+                      builder: (context) => const PlatformViewHolder(
+                          viewType: PlatformViewType.kBasic)),
                 );
               }),
           ElevatedButton(
@@ -49,8 +49,8 @@ class StartPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const TransformWidget(
-                          title: 'Input', viewType: PlatformViewType.kInput)),
+                      builder: (context) => const PlatformViewHolder(
+                          viewType: PlatformViewType.kInput)),
                 );
               }),
           ElevatedButton(
@@ -59,8 +59,8 @@ class StartPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const TransformWidget(
-                          title: 'Maps', viewType: PlatformViewType.kMap)),
+                      builder: (context) => const PlatformViewHolder(
+                          viewType: PlatformViewType.kMap)),
                 );
               }),
         ])));

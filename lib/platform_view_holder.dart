@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
-import 'platformviews.dart';
+import 'platform_view_type.dart';
+import 'platform_view.dart';
 
-class TransformWidget extends StatefulWidget {
-  const TransformWidget({Key? key, required this.title, required this.viewType})
+class PlatformViewHolder extends StatefulWidget {
+  const PlatformViewHolder({Key? key, required this.viewType})
       : super(key: key);
 
-  final String title;
   final PlatformViewType viewType;
 
   @override
-  State<StatefulWidget> createState() => _TransformWidgetState();
+  State<StatefulWidget> createState() => _PlatformViewHolderState();
 }
 
-class _TransformWidgetState extends State<TransformWidget> {
+class _PlatformViewHolderState extends State<PlatformViewHolder> {
   double opacity = 1.0;
   double radius = 0;
   double scale = 1.0;
@@ -24,47 +24,60 @@ class _TransformWidgetState extends State<TransformWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(platformViewTypeAsString(widget.viewType)),
       ),
-      body: Center(
+      body: Container(
+        decoration: BoxDecoration(
+            border: Border.all(
+                width: 1, color: const Color.fromARGB(255, 0, 255, 0))),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Stack(
+            Center(
+                child: Stack(
               children: <Widget>[
-                MutatorNativeView(
-                  angle: -math.pi / 180 * angle,
-                  opacity: opacity,
-                  radius: radius,
-                  scale: scale,
-                  viewType: widget.viewType,
-                ),
-                Opacity(
-                  opacity: 0.5,
-                  child: Container(
-                    constraints: BoxConstraints.expand(
-                      height: Theme.of(context)
+                Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                            width: 1,
+                            color: const Color.fromARGB(255, 255, 0, 0))),
+                    child: _HeldPlatformView(
+                      angle: -math.pi / 180 * angle,
+                      opacity: opacity,
+                      radius: radius,
+                      scale: scale,
+                      viewType: widget.viewType,
+                    )),
+                platformViewShouldHaveBanner(widget.viewType)
+                    ? Opacity(
+                        opacity: 0.5,
+                        child: Container(
+                          constraints: BoxConstraints.expand(
+                            height: Theme.of(context)
+                                        .textTheme
+                                        .headlineMedium!
+                                        .fontSize! *
+                                    1.1 +
+                                50.0,
+                            width: MediaQuery.of(context).size.width / 1.5,
+                          ),
+                          padding: const EdgeInsets.all(8.0),
+                          color: Colors.blue[600],
+                          alignment: Alignment.center,
+                          transform: Matrix4.rotationZ(0.2),
+                          child: Text('Flutter UI',
+                              style: Theme.of(context)
                                   .textTheme
                                   .headlineMedium!
-                                  .fontSize! *
-                              1.1 +
-                          50.0,
-                    ),
-                    padding: const EdgeInsets.all(8.0),
-                    color: Colors.blue[600],
-                    alignment: Alignment.center,
-                    transform: Matrix4.rotationZ(0.2),
-                    child: Text('Flutter UI',
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineMedium!
-                            .copyWith(color: Colors.white)),
-                  ),
-                ),
+                                  .copyWith(color: Colors.white)),
+                        ),
+                      )
+                    : Container(width: 0),
               ],
-            ),
-            // SizedBox(height: 256),
+            )),
             Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 const Text('Opacity'),
                 Slider(
@@ -83,6 +96,7 @@ class _TransformWidgetState extends State<TransformWidget> {
               ],
             ),
             Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 const Text('Rotate'),
                 Slider(
@@ -101,6 +115,7 @@ class _TransformWidgetState extends State<TransformWidget> {
               ],
             ),
             Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 const Text('Radius'),
                 Slider(
@@ -119,6 +134,7 @@ class _TransformWidgetState extends State<TransformWidget> {
               ],
             ),
             Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 const Text('Scale'),
                 Slider(
@@ -143,8 +159,8 @@ class _TransformWidgetState extends State<TransformWidget> {
   }
 }
 
-class MutatorNativeView extends StatelessWidget {
-  const MutatorNativeView(
+class _HeldPlatformView extends StatelessWidget {
+  const _HeldPlatformView(
       {required this.angle,
       required this.opacity,
       required this.radius,
