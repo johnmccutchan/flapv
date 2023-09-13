@@ -37,18 +37,13 @@ class _PlatformViewHolderState extends State<PlatformViewHolder> {
             Center(
                 child: Stack(
               children: <Widget>[
-                Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                            width: 1,
-                            color: const Color.fromARGB(255, 255, 0, 0))),
-                    child: _HeldPlatformView(
-                      angle: -math.pi / 180 * angle,
-                      opacity: opacity,
-                      radius: radius,
-                      scale: scale,
-                      viewType: widget.viewType,
-                    )),
+                _HeldPlatformView(
+                  angle: -math.pi / 180 * angle,
+                  opacity: opacity,
+                  radius: radius,
+                  scale: scale,
+                  viewType: widget.viewType,
+                ),
                 platformViewShouldHaveBanner(widget.viewType)
                     ? Opacity(
                         opacity: 0.5,
@@ -176,21 +171,25 @@ class _HeldPlatformView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Transform.rotate(
-      angle: angle,
-      child: Transform.scale(
-        scale: scale,
-        child: Opacity(
-          opacity: opacity,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(radius),
-            child: SizedBox(
-                height: 300,
-                width: 300,
-                child: PlatformView(viewType: viewType)),
+    return Container(
+        decoration: BoxDecoration(
+            border: Border.all(
+                width: 1, color: const Color.fromARGB(255, 255, 0, 0))),
+        child: Transform.rotate(
+          angle: angle,
+          child: Transform.scale(
+            scale: scale,
+            child: Opacity(
+              opacity: opacity,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(radius),
+                child: SizedBox(
+                    height: 300,
+                    width: 300,
+                    child: PlatformView(viewType: viewType)),
+              ),
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }
