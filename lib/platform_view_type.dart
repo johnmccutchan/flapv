@@ -1,7 +1,8 @@
 enum PlatformViewType {
   kBasic,
   kInput,
-  kMap,
+  kInputPureFlutter,
+  kAnimatedSurfaceView,
 }
 
 String platformViewTypeAsString(PlatformViewType viewType) {
@@ -10,14 +11,17 @@ String platformViewTypeAsString(PlatformViewType viewType) {
       return 'static-text-view';
     case PlatformViewType.kInput:
       return 'input-grid-view';
-    case PlatformViewType.kMap:
-      return 'google-map-view';
+    case PlatformViewType.kInputPureFlutter:
+      return 'input-grid-view-flutter';
+    case PlatformViewType.kAnimatedSurfaceView:
+      return 'animated-surface-view';
   }
 }
 
 bool platformViewShouldHaveBanner(PlatformViewType viewType) {
   switch (viewType) {
     case PlatformViewType.kInput:
+    case PlatformViewType.kInputPureFlutter:
       return false;
     default:
       return true;

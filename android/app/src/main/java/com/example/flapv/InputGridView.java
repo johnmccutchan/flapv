@@ -54,6 +54,9 @@ class InputGridView implements PlatformView {
           public boolean onTouch(View v, MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_UP) {
               textView.setBackgroundColor(getRandomColor());
+              final String cellAsString = textView.getText().toString().trim();
+              final int newCell = Integer.parseInt(cellAsString) + 1;
+              textView.setText(" " + newCell + " ");
             }
             Log.e(TAG, "#onTouch " + event.getAction() + " cell=" + cell);
             return true;

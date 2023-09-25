@@ -19,6 +19,8 @@ class _PlatformViewHolderState extends State<PlatformViewHolder> {
   double radius = 0;
   double scale = 1.0;
   double angle = 0;
+  bool offstage = false;
+  bool banner = false;
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +45,9 @@ class _PlatformViewHolderState extends State<PlatformViewHolder> {
                   radius: radius,
                   scale: scale,
                   viewType: widget.viewType,
+                  offstage: offstage,
                 ),
-                platformViewShouldHaveBanner(widget.viewType)
+                banner
                     ? Opacity(
                         opacity: 0.5,
                         child: Container(
@@ -147,6 +150,34 @@ class _PlatformViewHolderState extends State<PlatformViewHolder> {
                 ),
               ],
             ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text('Offstage'),
+                Checkbox(
+                  value: offstage,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      offstage = value!;
+                    });
+                  },
+                ),
+              ],
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text('Overlay banner'),
+                Checkbox(
+                  value: banner,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      banner = value!;
+                    });
+                  },
+                ),
+              ],
+            ),
           ],
         ),
       ),
@@ -161,6 +192,7 @@ class _HeldPlatformView extends StatelessWidget {
       required this.radius,
       required this.scale,
       required this.viewType,
+      required this.offstage,
       Key? key})
       : super(key: key);
   final double opacity;
@@ -168,6 +200,7 @@ class _HeldPlatformView extends StatelessWidget {
   final double angle;
   final double scale;
   final PlatformViewType viewType;
+  final bool offstage;
 
   @override
   Widget build(BuildContext context) {
@@ -176,20 +209,21 @@ class _HeldPlatformView extends StatelessWidget {
             border: Border.all(
                 width: 1, color: const Color.fromARGB(255, 255, 0, 0))),
         child: Transform.rotate(
-          angle: angle,
-          child: Transform.scale(
-            scale: scale,
-            child: Opacity(
-              opacity: opacity,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(radius),
-                child: SizedBox(
-                    height: 300,
-                    width: 300,
-                    child: PlatformView(viewType: viewType)),
+            angle: angle,
+            child: Transform.scale(
+              scale: scale,
+              child: Opacity(
+                opacity: opacity,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(radius),
+                  child: SizedBox(
+                      height: 300,
+                      width: 300,
+                      child: Offstage(
+                          offstage: offstage,
+                          child: PlatformView(viewType: viewType))),
+                ),
               ),
-            ),
-          ),
-        ));
+            )));
   }
 }

@@ -54,13 +54,23 @@ class StartPage extends StatelessWidget {
                 );
               }),
           ElevatedButton(
-              child: const Text('Maps'),
+              child: const Text('Input (Flutter)'),
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => const PlatformViewHolder(
-                          viewType: PlatformViewType.kMap)),
+                          viewType: PlatformViewType.kInputPureFlutter)),
+                );
+              }),
+          ElevatedButton(
+              child: const Text('Animated Surface View'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const PlatformViewHolder(
+                          viewType: PlatformViewType.kAnimatedSurfaceView)),
                 );
               }),
         ])));

@@ -18,9 +18,10 @@ import java.util.Random;
 
 class StaticTextView implements PlatformView {
   private final String TAG = "StaticTextView";
-  @NonNull private final TextView textView;
+  @NonNull
+  private final TextView textView;
   private int id;
-
+  private int clickCount = 0;
   private int getRandomColor() {
     Random rnd = new Random();
     return Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
@@ -30,23 +31,41 @@ class StaticTextView implements PlatformView {
     this.id = id;
     textView = new TextView(context);
     textView.setTextSize(20);
-
+    textView.setTextColor(Color.BLACK);
     textView.setBackgroundColor(getRandomColor());
     textView.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
 
+    int count = 0;
     StringBuilder sb = new StringBuilder();
-    sb.append("Static Text View (id: " + id + ")");
-    textView.setTextColor(Color.BLACK);
+    sb.append("Static Text View (id: " + id + ")\n");
+    sb.append(" " + clickCount + " ");
+    clickCount++;
     textView.setText(sb.toString());
+    
 
     textView.setOnTouchListener(new View.OnTouchListener() {
       @Override
       public boolean onTouch(View v, MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_UP) {
           textView.setBackgroundColor(getRandomColor());
+          StringBuilder sb = new StringBuilder();
+          sb.append("Static Text View (id: " + id + ")\n");
+          sb.append(" " + clickCount + " ");
+          clickCount++;
+          textView.setText(sb.toString());
         }
         Log.e(TAG, "#onTouch " + event.getAction());
-        return true;
+        return false;
+      }
+    });
+
+    textView.setOnGenericMotionListener(new View.OnGenericMotionListener() {
+      @Override
+      public boolean onGenericMotion(View v, MotionEvent event) {
+        if (event.getAction() != MotionEvent.ACTION_HOVER_MOVE) {
+          Log.e(TAG, "VIEW onGenericMotion event=" + event.toString());
+        }
+        return false;
       }
     });
   }
@@ -54,17 +73,10 @@ class StaticTextView implements PlatformView {
   @NonNull
   @Override
   public View getView() {
+    int[] loc = new int[2];
+    textView.getLocationOnScreen(loc);
+    Log.e(TAG, "#StaticTextView#getView left=" + loc[0] + " top=" + loc[1] + " right=" + (loc[0] + textView.getWidth()) + " bottom=" + (loc[1] + textView.getHeight()));
     return textView;
-  }
-
-  @Override
-  public void onFlutterViewAttached(@NonNull View flutterView) {
-    Log.e(TAG, "#StaticTextView#onFlutterViewAttached, " + flutterView);
-  }
-
-  @Override
-  public void onFlutterViewDetached() {
-    Log.e(TAG, "#StaticTextView#onFlutterViewDetached");
   }
 
   @Override
